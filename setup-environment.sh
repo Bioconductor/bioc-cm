@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# This script should be tested against shellcheck .  For more information,
+#   see: http://www.shellcheck.net/
+
 # set -e
 # set -x
 
@@ -26,7 +29,9 @@ pushd "$tmp" > /dev/null
 
 function cleanup {
   popd > /dev/null
-  rm -rf "$tmp"
+  if [ -f "$tmp" ]; then
+    rm -rf "$tmp"
+  fi
 }
 
 function errexit {
@@ -42,8 +47,11 @@ function errexit {
 
 
 # Download the config file locally
-curl -sSL  https://master.bioconductor.org/config.yaml > config.yaml
+curl -sSL  https://master.bioconductor.org/config.yaml -o config.yaml
 
+# Based on:
+# - http://stackoverflow.com/a/21189044/320399
+# - https://gist.github.com/pkuczynski/8665367
 function parse_yaml {
    local prefix=$2
    # shellcheck disable=SC2155
@@ -79,7 +87,7 @@ function setupEnvironment {
 
   # Run the parser, all variables found are declared in local shell .
   # Unfortunately, this means we have `disable=SC2154` throughout the code.
-  eval $(parse_yaml config.yaml "$VAR_PREFIX")
+  eval "$(parse_yaml config.yaml ${VAR_PREFIX})"
   echo "***********************"
 
   # shellcheck disable=SC2154
@@ -132,7 +140,7 @@ The environment is now configured with the following environment variables:
        "$VAR_PREFIX"* )
         # eval \$${varAndVal}=
         echo "WARNING: Unsetting $varAndVal"
-        eval unset \$${varAndVal}
+        eval unset \$"${varAndVal}"
        ;;
 
       esac
