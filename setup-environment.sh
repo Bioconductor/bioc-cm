@@ -6,12 +6,8 @@
 # set -e
 # set -x
 
-minimum_version=4
-if [ "$BASH_VERSION" \< "$minimum_version" ]; then
-  echo "This script requires Bash version 4.x or later."
-  exit 1
-fi
-
+# Ensure the script has been sourced so that environment variables
+#   can be exported
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
   echo "The script '${BASH_SOURCE[0]}' is being sourced."
 else
