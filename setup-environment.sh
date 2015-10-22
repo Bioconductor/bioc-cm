@@ -42,7 +42,7 @@ function errexit {
 
 
 # Download the config file locally
-curl -sSL  https://raw.githubusercontent.com/Bioconductor/bioconductor.org/master/config.yaml > config.yaml
+curl -sSL  https://master.bioconductor.org/config.yaml > config.yaml
 
 function parse_yaml {
    local prefix=$2
