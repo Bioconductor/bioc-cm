@@ -1,4 +1,4 @@
-# bioc-cm
+# bioc-cm [![Build Status](https://travis-ci.org/Bioconductor/bioc-cm.svg?branch=master)](https://travis-ci.org/Bioconductor/bioc-cm)
 
 This project has been created to solve the following problem : https://github.com/Bioconductor/BBS/issues/11 .
 
