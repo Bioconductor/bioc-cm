@@ -18,6 +18,8 @@ else
   exit 1
 fi
 
+# Note, this prefix is used for internal (non-exported) variables.  It's a side
+#   effect of the YAML parser we're using.
 VAR_PREFIX="VAR_PREFIX_"
 
 tmp=$(mktemp -d)
@@ -101,32 +103,32 @@ Bioconductor release version :     ${VAR_PREFIX_release_version}"
 
   LINUX_BUILD_HTML_ROOT="/home/biocbuild/public_html/BBS"
 
-  export SOFTWARE_BUILD_NODES
-  export DATA_BUILD_NODES
-  export INVESTIGATION_DIR
+  # All variables exported by this script will use the prefix 'CM_"'
+  export CM_SOFTWARE_BUILD_NODES
+  export CM_DATA_BUILD_NODES
+  export CM_INVESTIGATION_DIR
 
   # FIXME: Remove second condition, for testing purposes only
   if [[ $(hostname) = "$LINUX_DEV_BLDR" ]] || [[ $(hostname) = "work" ]]; then
     echo "This machine is the linux builder for devel."
-    SOFTWARE_BUILD_NODES="${LINUX_BUILD_HTML_ROOT}/${VAR_PREFIX_devel_version}/bioc/nodes"
-    DATA_BUILD_NODES="${LINUX_BUILD_HTML_ROOT}/${VAR_PREFIX_devel_version}/data-experiment/nodes"
-    INVESTIGATION_DIR="/home/biocbuild/bbs-${VAR_PREFIX_devel_version}-bioc/log"
+    CM_SOFTWARE_BUILD_NODES="${LINUX_BUILD_HTML_ROOT}/${VAR_PREFIX_devel_version}/bioc/nodes"
+    CM_DATA_BUILD_NODES="${LINUX_BUILD_HTML_ROOT}/${VAR_PREFIX_devel_version}/data-experiment/nodes"
+    CM_INVESTIGATION_DIR="/home/biocbuild/bbs-${VAR_PREFIX_devel_version}-bioc/log"
   elif [[ $(hostname) = "$LINUX_REL_BLDR" ]]; then
     echo "This machine is the linux builder for release."
-
-    SOFTWARE_BUILD_NODES="${LINUX_BUILD_HTML_ROOT}/${VAR_PREFIX_release_version}/bioc/nodes"
-    DATA_BUILD_NODES="${LINUX_BUILD_HTML_ROOT}/${VAR_PREFIX_release_version}/data-experiment/nodes"
-    INVESTIGATION_DIR="/home/biocbuild/bbs-${VAR_PREFIX_release_version}-bioc/log"
+    CM_SOFTWARE_BUILD_NODES="${LINUX_BUILD_HTML_ROOT}/${VAR_PREFIX_release_version}/bioc/nodes"
+    CM_DATA_BUILD_NODES="${LINUX_BUILD_HTML_ROOT}/${VAR_PREFIX_release_version}/data-experiment/nodes"
+    CM_INVESTIGATION_DIR="/home/biocbuild/bbs-${VAR_PREFIX_release_version}-bioc/log"
   else
-    errexit "This machine isn't the linux   builder for release or devel, cannot continue."
+    errexit "This machine isn't the linux builder for release or devel, cannot continue."
   fi
 
   echo "
 The environment is now configured with the following environment variables:
 
-  SOFTWARE_BUILD_NODES : '$SOFTWARE_BUILD_NODES'
-  DATA_BUILD_NODES :     '$DATA_BUILD_NODES'
-  INVESTIGATION_DIR :    '$INVESTIGATION_DIR'
+  CM_SOFTWARE_BUILD_NODES : '$CM_SOFTWARE_BUILD_NODES'
+  CM_DATA_BUILD_NODES :     '$CM_DATA_BUILD_NODES'
+  CM_INVESTIGATION_DIR :    '$CM_INVESTIGATION_DIR'
 "
 
   cleanup
