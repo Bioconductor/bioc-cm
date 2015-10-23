@@ -131,24 +131,27 @@ The environment is now configured with the following environment variables:
   CM_INVESTIGATION_DIR :    '$CM_INVESTIGATION_DIR'
 "
 
-  cleanup
-  for varAndVal in $(printenv) ; do
-    # echo "Checking stuff, varAndVal = $varAndVal"
-     case ${varAndVal} in
-       "$VAR_PREFIX"* )
-        # eval \$${varAndVal}=
-        echo "WARNING: Unsetting $varAndVal"
-        eval unset \$"${varAndVal}"
-       ;;
+  # Cleanup shell variables
+  #
+  # Without the next bit of code, we're leaving numerous $VAR_PREFIX_ variables
+  # in the user's shell after this has run.
+  #
+  # Don't use printenv to get local variables, per http://stackoverflow.com/a/5657113/320399 .
+  # Also, we need to avoid printing functions names: http://stackoverflow.com/a/1305273/320399
+   ( set -o posix ; set ) > local_variables
 
-      esac
+   for varAndVal in $(grep VAR_PR local_variables | cut -d'=' -f1) ; do
+      # echo "Checking stuff, varAndVal = $varAndVal"
+      unset "${varAndVal}"
    done
 
    unset -f setupEnvironment
    unset -f debugParsedYaml
    unset -f parse_yaml
    unset -f exitMsg
+   cleanup
    unset -f cleanup
+
    echo "Finished configuring environment."
 }
 
