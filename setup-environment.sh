@@ -138,12 +138,15 @@ The environment is now configured with the following environment variables:
   #
   # Don't use printenv to get local variables, per http://stackoverflow.com/a/5657113/320399 .
   # Also, we need to avoid printing functions names: http://stackoverflow.com/a/1305273/320399
-   ( set -o posix ; set ) > local_variables
-
-   for varAndVal in $(grep VAR_PR local_variables | cut -d'=' -f1) ; do
-      # echo "Checking stuff, varAndVal = $varAndVal"
-      unset "${varAndVal}"
-   done
+  ( set -o posix ; set ) > local_variables
+   # Proper looping over lines received from grep.  More info :
+   #    https://github.com/Bioconductor/bioc-cm/pull/4
+   #    http://stackoverflow.com/a/10929511/320399
+   #    http://stackoverflow.com/a/16318005/320399
+  while IFS='' read -r varToUnset || [[ -n "$varToUnset" ]]; do
+    # echo "Debugging: varToUnset = $varToUnset"
+    unset "${varToUnset}"
+  done < <(grep VAR_PR local_variables | cut -d '=' -f1 )
 
    unset -f setupEnvironment
    unset -f debugParsedYaml
