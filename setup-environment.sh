@@ -131,24 +131,30 @@ The environment is now configured with the following environment variables:
   CM_INVESTIGATION_DIR :    '$CM_INVESTIGATION_DIR'
 "
 
-  cleanup
-  for varAndVal in $(printenv) ; do
-    # echo "Checking stuff, varAndVal = $varAndVal"
-     case ${varAndVal} in
-       "$VAR_PREFIX"* )
-        # eval \$${varAndVal}=
-        echo "WARNING: Unsetting $varAndVal"
-        eval unset \$"${varAndVal}"
-       ;;
-
-      esac
-   done
+  # Cleanup shell variables
+  #
+  # Without the next bit of code, we're leaving numerous $VAR_PREFIX_ variables
+  # in the user's shell after this has run.
+  #
+  # Don't use printenv to get local variables, per http://stackoverflow.com/a/5657113/320399 .
+  # Also, we need to avoid printing functions names: http://stackoverflow.com/a/1305273/320399
+  ( set -o posix ; set ) > local_variables
+   # Proper looping over lines received from grep.  More info :
+   #    https://github.com/Bioconductor/bioc-cm/pull/4
+   #    http://stackoverflow.com/a/10929511/320399
+   #    http://stackoverflow.com/a/16318005/320399
+  while IFS='' read -r varToUnset || [[ -n "$varToUnset" ]]; do
+    # echo "Debugging: varToUnset = $varToUnset"
+    unset "${varToUnset}"
+  done < <(grep VAR_PR local_variables | cut -d '=' -f1 )
 
    unset -f setupEnvironment
    unset -f debugParsedYaml
    unset -f parse_yaml
    unset -f exitMsg
+   cleanup
    unset -f cleanup
+
    echo "Finished configuring environment."
 }
 
