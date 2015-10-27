@@ -106,6 +106,7 @@ Bioconductor release version :     ${VAR_PREFIX_release_version}"
   # All variables exported by this script will use the prefix 'CM_"'
   export CM_SOFTWARE_BUILD_NODES
   export CM_DATA_BUILD_NODES
+  export CM_SOFTWARE_BUILD_STAGING
   export CM_INVESTIGATION_DIR
 
   # FIXME: Remove second condition, for testing purposes only
@@ -113,11 +114,13 @@ Bioconductor release version :     ${VAR_PREFIX_release_version}"
     echo "This machine is the linux builder for devel."
     CM_SOFTWARE_BUILD_NODES="${LINUX_BUILD_HTML_ROOT}/${VAR_PREFIX_devel_version}/bioc/nodes"
     CM_DATA_BUILD_NODES="${LINUX_BUILD_HTML_ROOT}/${VAR_PREFIX_devel_version}/data-experiment/nodes"
+    CM_SOFTWARE_BUILD_STAGING="/home/biocbuild/bbs-${VAR_PREFIX_devel_version}-bioc/"
     CM_INVESTIGATION_DIR="/home/biocbuild/bbs-${VAR_PREFIX_devel_version}-bioc/log"
   elif [[ $(hostname) = "$LINUX_REL_BLDR" ]]; then
     echo "This machine is the linux builder for release."
     CM_SOFTWARE_BUILD_NODES="${LINUX_BUILD_HTML_ROOT}/${VAR_PREFIX_release_version}/bioc/nodes"
     CM_DATA_BUILD_NODES="${LINUX_BUILD_HTML_ROOT}/${VAR_PREFIX_release_version}/data-experiment/nodes"
+    CM_SOFTWARE_BUILD_STAGING="/home/biocbuild/bbs-${VAR_PREFIX_release_version}-bioc/"
     CM_INVESTIGATION_DIR="/home/biocbuild/bbs-${VAR_PREFIX_release_version}-bioc/log"
   else
     errexit "This machine isn't the linux builder for release or devel, cannot continue."
