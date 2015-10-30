@@ -7,3 +7,6 @@ script:
   - "shellcheck *.sh"
   - ". setup-environment.sh"
   - 'echo "Testing exported variable: $CM_SOFTWARE_BUILD_NODES"'
+notifications:
+  email:
+    - brian@bioconductor.org
