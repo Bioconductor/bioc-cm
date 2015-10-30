@@ -5,3 +5,5 @@ before_install:
 install: true
 script:
   - "shellcheck *.sh"
+  - ". setup-environment.sh"
+  - 'echo "Testing exported variable: $CM_SOFTWARE_BUILD_NODES"'
