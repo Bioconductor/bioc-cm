@@ -88,6 +88,9 @@ function setupEnvironment {
   eval "$(parse_yaml config.yaml ${VAR_PREFIX})"
   echo "***********************"
 
+  export CM_BIOC_REL_VERSION="${VAR_PREFIX_release_version}"
+  export CM_BIOC_DEVEL_VERSION="${VAR_PREFIX_devel_version}""
+
   # shellcheck disable=SC2154
   echo "
 Bioconductor release version :     ${VAR_PREFIX_release_version}"
@@ -129,6 +132,8 @@ The environment is now configured with the following environment variables:
   CM_SOFTWARE_BUILD_NODES : '$CM_SOFTWARE_BUILD_NODES'
   CM_DATA_BUILD_NODES :     '$CM_DATA_BUILD_NODES'
   CM_INVESTIGATION_DIR :    '$CM_INVESTIGATION_DIR'
+  CM_BIOC_REL_VERSION :     '$CM_BIOC_REL_VERSION'
+  CM_BIOC_DEVEL_VERSION :   '$CM_BIOC_DEVEL_VERSION'
 "
 
   # Cleanup shell variables
