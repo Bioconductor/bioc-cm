@@ -88,8 +88,12 @@ function setupEnvironment {
   eval "$(parse_yaml config.yaml ${VAR_PREFIX})"
   echo "***********************"
 
-  export CM_BIOC_REL_VERSION="${VAR_PREFIX_release_version}"
-  export CM_BIOC_DEVEL_VERSION="${VAR_PREFIX_devel_version}""
+  export CM_BIOC_REL_VERSION
+  # shellcheck disable=SC2154
+  CM_BIOC_REL_VERSION="$VAR_PREFIX_release_version"
+  export CM_BIOC_DEVEL_VERSION
+  # shellcheck disable=SC2154
+  CM_BIOC_DEVEL_VERSION="${VAR_PREFIX_devel_version}"
 
   # shellcheck disable=SC2154
   echo "
