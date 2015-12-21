@@ -6,6 +6,10 @@
 # set -e
 # set -x
 
+# Set MAILTO to empty string, thus disabling the automatic
+# emailing of output to biocbuild users.
+MAILTO=""
+
 # Ensure the script has been sourced so that environment variables
 #   can be exported
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
